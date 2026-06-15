@@ -1,0 +1,29 @@
+{
+  "id": "bac012cb-44ad-41b5-bed0-e6fcb44266f0",
+  "name": "ALProject9",
+   "publisher": "Default Publisher",
+  "version": "1.0.0.0",
+  "brief": "",
+  "description": "",
+  "privacyStatement": "",
+  "EULA": "",
+  "help": "",
+  "url": "",
+  "logo": "",
+  "dependencies": [],
+  "screenshots": [],
+  "platform": "1.0.0.0",
+  "application": "17.0.0.0",
+  "idRanges": [
+    {
+      "from": 50100,
+      "to": 50149
+    }
+  ],
+  "showMyCode": true,
+  "runtime": "6.6",
+  "features": [
+    "NoImplicitWith"
+  ]
+}
+
