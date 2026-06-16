@@ -1,1015 +1,492 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2016/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
+<Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2016/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner" xmlns:am="http://schemas.microsoft.com/sqlserver/reporting/authoringmetadata">
+  <rd:ReportUnitType>Cm</rd:ReportUnitType>
+  <rd:ReportID>0eeb6585-38ae-40f1-885b-8d50088d51b4</rd:ReportID>
+  <am:AuthoringMetadata>
+    <am:CreatedBy>
+      <am:Name>MSRB</am:Name>
+      <am:Version>15.1.30001.02</am:Version>
+    </am:CreatedBy>
+    <am:UpdatedBy>
+      <am:Name>MSRB</am:Name>
+      <am:Version>15.1.30001.02</am:Version>
+    </am:UpdatedBy>
+    <am:LastModifiedTimestamp>2026-06-16T06:07:05.2195203Z</am:LastModifiedTimestamp>
+  </am:AuthoringMetadata>
   <AutoRefresh>0</AutoRefresh>
-  <!-- ═══════════════════════════════════════════════════
-       DATA SOURCE
-       ═══════════════════════════════════════════════════ -->
   <DataSources>
-    <DataSource Name="EmployeeAdvanceDS">
+    <DataSource Name="DataSource">
+      <rd:SecurityType>None</rd:SecurityType>
       <ConnectionProperties>
-        <DataProvider>System.Data.DataSet</DataProvider>
+        <DataProvider>SQL</DataProvider>
         <ConnectString />
       </ConnectionProperties>
-      <rd:DataSourceID>EmployeeAdvanceDS</rd:DataSourceID>
+      <rd:DataSourceID>3b0f85cb-6ea7-462b-9ccf-2727f125619b</rd:DataSourceID>
     </DataSource>
   </DataSources>
-  <!-- ═══════════════════════════════════════════════════
-       DATASET  –  all header + line fields in one flat
-       dataset, grouped on Request_No inside the Tablix.
-       ═══════════════════════════════════════════════════ -->
-  <!-- ═══════════════════════════════════════════════════
-       PAGE HEADER  –  repeats on every printed page
-       ═══════════════════════════════════════════════════ -->
-  <PageHeader>
-    <Height>2.8cm</Height>
-    <PrintOnFirstPage>true</PrintOnFirstPage>
-    <PrintOnLastPage>true</PrintOnLastPage>
-    <ReportItems>
-      <!-- Outer border rectangle -->
-      <Rectangle Name="HeaderBorderRect">
-        <Top>0cm</Top>
-        <Left>0cm</Left>
-        <Width>19cm</Width>
-        <Height>2.8cm</Height>
-        <Style>
-          <BorderStyle>
-            <Default>Solid</Default>
-          </BorderStyle>
-          <BorderColor>
-            <Default>#CCCCCC</Default>
-          </BorderColor>
-          <BorderWidth>
-            <Default>1pt</Default>
-          </BorderWidth>
-        </Style>
-      </Rectangle>
-      <!-- Company Logo (left) -->
-      <Image Name="CompanyLogo">
-        <Top>0.2cm</Top>
-        <Left>0.3cm</Left>
-        <Width>2.8cm</Width>
-        <Height>2.2cm</Height>
-        <Source>Database</Source>
-        <Value>=Fields!Company_Logo.Value</Value>
-        <Sizing>FitProportional</Sizing>
-        <Style>
-          <BorderStyle>
-            <Default>None</Default>
-          </BorderStyle>
-        </Style>
-      </Image>
-      <!-- Company Name (centre-left) -->
-      <Textbox Name="CompanyNameHdr">
-        <Top>0.3cm</Top>
-        <Left>3.5cm</Left>
-        <Width>7cm</Width>
-        <Height>0.8cm</Height>
-        <Value>=First(Fields!Company_Name.Value, "EmployeeAdvanceDataSet")</Value>
-        <Style>
-          <FontFamily>Segoe UI</FontFamily>
-          <FontSize>13pt</FontSize>
-          <FontWeight>Bold</FontWeight>
-          <Color>#1a1a2e</Color>
-          <VerticalAlign>Middle</VerticalAlign>
-        </Style>
-      </Textbox>
-      <!-- Vertical divider line -->
-      <Line Name="HdrDivider">
-        <Top>0.2cm</Top>
-        <Left>11cm</Left>
-        <Height>2.4cm</Height>
-        <Width>0cm</Width>
-        <Style>
-          <BorderStyle>
-            <Default>Solid</Default>
-          </BorderStyle>
-          <BorderColor>
-            <Default>#AAAAAA</Default>
-          </BorderColor>
-          <BorderWidth>
-            <Default>0.5pt</Default>
-          </BorderWidth>
-        </Style>
-      </Line>
-      <!-- Report title (right block) -->
-      <Textbox Name="VoucherTitle">
-        <Top>0.25cm</Top>
-        <Left>11.5cm</Left>
-        <Width>7.3cm</Width>
-        <Height>1cm</Height>
-        <Value>EMPLOYEE ADVANCE VOUCHER</Value>
-        <Style>
-          <FontFamily>Segoe UI</FontFamily>
-          <FontSize>14pt</FontSize>
-          <FontWeight>Bold</FontWeight>
-          <Color>#1a1a2e</Color>
-          <TextAlign>Right</TextAlign>
-          <VerticalAlign>Middle</VerticalAlign>
-        </Style>
-      </Textbox>
-      <!-- Status badge (right block, below title) -->
-      <Textbox Name="StatusBadge">
-        <Top>1.4cm</Top>
-        <Left>11.5cm</Left>
-        <Width>7.3cm</Width>
-        <Height>0.7cm</Height>
-        <Value>=First(Fields!Status.Value, "EmployeeAdvanceDataSet")</Value>
-        <Style>
-          <FontFamily>Segoe UI</FontFamily>
-          <FontSize>10pt</FontSize>
-          <FontWeight>Bold</FontWeight>
-          <TextAlign>Right</TextAlign>
-          <VerticalAlign>Middle</VerticalAlign>
-          <Color>
-            =IIF(
-              First(Fields!Status.Value,"EmployeeAdvanceDataSet") = "Approved", "#1a7a1a",
-              IIF(
-                First(Fields!Status.Value,"EmployeeAdvanceDataSet") = "Rejected", "#cc0000",
-                "#cc6600"
-              )
-            )
-          </Color>
-        </Style>
-      </Textbox>
-      <!-- Page number (bottom right of header) -->
-      <Textbox Name="PageNumber">
-        <Top>2.2cm</Top>
-        <Left>14cm</Left>
-        <Width>4.8cm</Width>
-        <Height>0.5cm</Height>
-        <Value>="Page " &amp; Globals!PageNumber &amp; " of " &amp; Globals!TotalPages</Value>
-        <Style>
-          <FontFamily>Segoe UI</FontFamily>
-          <FontSize>7pt</FontSize>
-          <Color>#888888</Color>
-          <TextAlign>Right</TextAlign>
-        </Style>
-      </Textbox>
-    </ReportItems>
-  </PageHeader>
-  <!-- ═══════════════════════════════════════════════════
-       BODY
-       ═══════════════════════════════════════════════════ -->
-  <Body>
-    <Height>24cm</Height>
-    <ReportItems>
-      <!-- ─────────────────────────────────────────────
-           OUTER TABLIX  –  one row-group per Request_No
-           with a page break Between groups.
-           All body content lives inside the group row so
-           it repeats correctly for each request.
-           ───────────────────────────────────────────── -->
-      <Tablix Name="RequestGroup">
-        <Top>0cm</Top>
-        <Left>0cm</Left>
-        <Width>19cm</Width>
-        <DataSetName>EmployeeAdvanceDataSet</DataSetName>
-        <!-- Single column that spans the full width -->
-        <TablixColumnHierarchy>
-          <TablixMembers>
-            <TablixMember />
-          </TablixMembers>
-        </TablixColumnHierarchy>
-        <TablixRowHierarchy>
-          <TablixMembers>
-            <!-- ── GROUP on Request_No with page break ── -->
-            <TablixMember>
-              <Group Name="GroupByRequest">
-                <GroupExpressions>
-                  <GroupExpression>=Fields!Request_No.Value</GroupExpression>
-                </GroupExpressions>
-                <PageBreak>
-                  <BreakLocation>Between</BreakLocation>
-                </PageBreak>
-              </Group>
-              <TablixHeader>
-                <Size>0cm</Size>
-                <CellContents>
-                  <Textbox Name="DummyGroupHdr">
-                    <Value />
-                  </Textbox>
-                </CellContents>
-              </TablixHeader>
+  <ReportSections>
+    <ReportSection>
+      <Body>
+        <ReportItems>
+          <Tablix Name="Tablix1">
+            <TablixBody>
+              <TablixColumns>
+                <TablixColumn>
+                  <Width>1.99319cm</Width>
+                </TablixColumn>
+                <TablixColumn>
+                  <Width>1.99319cm</Width>
+                </TablixColumn>
+                <TablixColumn>
+                  <Width>1.99319cm</Width>
+                </TablixColumn>
+              </TablixColumns>
+              <TablixRows>
+                <TablixRow>
+                  <Height>1.12889cm</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox5">
+                          <rd:DefaultName>Textbox5</rd:DefaultName>
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value />
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox7">
+                          <rd:DefaultName>Textbox7</rd:DefaultName>
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value />
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox9">
+                          <rd:DefaultName>Textbox9</rd:DefaultName>
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value />
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                  </TablixCells>
+                </TablixRow>
+                <TablixRow>
+                  <Height>1.12889cm</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox6">
+                          <rd:DefaultName>Textbox6</rd:DefaultName>
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value />
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox8">
+                          <rd:DefaultName>Textbox8</rd:DefaultName>
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value />
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <rd:Selected>true</rd:Selected>
+                        <Textbox Name="Textbox10">
+                          <rd:DefaultName>Textbox10</rd:DefaultName>
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value />
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                  </TablixCells>
+                </TablixRow>
+              </TablixRows>
+            </TablixBody>
+            <TablixColumnHierarchy>
               <TablixMembers>
-                <!-- ── ROW 1 : Document Header grey box ── -->
+                <TablixMember />
+                <TablixMember />
+                <TablixMember />
+              </TablixMembers>
+            </TablixColumnHierarchy>
+            <TablixRowHierarchy>
+              <TablixMembers>
                 <TablixMember>
                   <KeepWithGroup>After</KeepWithGroup>
                 </TablixMember>
-                <!-- ── ROW 2 : Expense line detail (repeating) ── -->
                 <TablixMember>
-                  <Group Name="DetailGroup" />
-                </TablixMember>
-                <!-- ── ROW 3 : Column header row (kept before details) ── -->
-                <TablixMember>
-                  <KeepWithGroup>After</KeepWithGroup>
-                  <RepeatOnNewPage>true</RepeatOnNewPage>
-                </TablixMember>
-                <!-- ── ROW 4 : Totals + Remarks + Signatures ── -->
-                <TablixMember>
-                  <KeepWithGroup>Before</KeepWithGroup>
+                  <Group Name="Details" />
                 </TablixMember>
               </TablixMembers>
-            </TablixMember>
-          </TablixMembers>
-        </TablixRowHierarchy>
-        <!-- ════════════════════════════════════
-             TABLIX BODY  –  rows defined here
-             ════════════════════════════════════ -->
-        <TablixBody>
-          <TablixColumns>
-            <TablixColumn>
-              <Width>19cm</Width>
-            </TablixColumn>
-          </TablixColumns>
-          <TablixRows>
-            <!-- ══════════════════════════════════════════
-                 ROW 1  ─  Document Header (grey background)
-                 ══════════════════════════════════════════ -->
-            <TablixRow>
-              <Height>3cm</Height>
-              <TablixCells>
-                <TablixCell>
-                  <CellContents>
-                    <Rectangle Name="DocHeaderRect">
+            </TablixRowHierarchy>
+            <Top>1.79131cm</Top>
+            <Left>2.52801cm</Left>
+            <Height>2.25778cm</Height>
+            <Width>5.97958cm</Width>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Tablix>
+        </ReportItems>
+        <Height>8.61413cm</Height>
+        <Style>
+          <Border>
+            <Style>Solid</Style>
+          </Border>
+          <TopBorder>
+            <Style>Solid</Style>
+          </TopBorder>
+          <BottomBorder>
+            <Style>Solid</Style>
+          </BottomBorder>
+          <LeftBorder>
+            <Style>Solid</Style>
+          </LeftBorder>
+          <RightBorder>
+            <Style>Solid</Style>
+          </RightBorder>
+        </Style>
+      </Body>
+      <Width>21.0058cm</Width>
+      <Page>
+        <PageHeader>
+          <Height>3.51226in</Height>
+          <PrintOnFirstPage>true</PrintOnFirstPage>
+          <PrintOnLastPage>true</PrintOnLastPage>
+          <ReportItems>
+            <Image Name="Image1">
+              <Source>Database</Source>
+              <Value>=Fields!CompanyPicture.Value</Value>
+              <MIMEType>image/bmp</MIMEType>
+              <Sizing>FitProportional</Sizing>
+              <Top>0.14111in</Top>
+              <Left>0.06889in</Left>
+              <Height>0.95139in</Height>
+              <Width>1.23611in</Width>
+              <Style>
+                <Border>
+                  <Style>None</Style>
+                </Border>
+              </Style>
+            </Image>
+            <Textbox Name="Textbox3">
+              <rd:DefaultName>Textbox3</rd:DefaultName>
+              <CanGrow>true</CanGrow>
+              <KeepTogether>true</KeepTogether>
+              <Paragraphs>
+                <Paragraph>
+                  <TextRuns>
+                    <TextRun>
+                      <Value>Employee Advance Voucher</Value>
                       <Style>
-                        <BackgroundColor>#E8E8E8</BackgroundColor>
-                        <BorderStyle>
-                          <Default>Solid</Default>
-                          <Left>Solid</Left>
-                          <Right>Solid</Right>
-                          <Top>Solid</Top>
-                          <Bottom>Solid</Bottom>
-                        </BorderStyle>
-                        <BorderColor>
-                          <Default>#BBBBBB</Default>
-                        </BorderColor>
-                        <BorderWidth>
-                          <Default>0.5pt</Default>
-                        </BorderWidth>
+                        <FontSize>18pt</FontSize>
+                        <FontWeight>Bold</FontWeight>
                       </Style>
-                      <ReportItems>
-                        <!-- Request No -->
-                        <Textbox Name="LblRequestNo">
-                          <Top>0.2cm</Top>
-                          <Left>0.4cm</Left>
-                          <Width>3cm</Width>
-                          <Height>0.5cm</Height>
-                          <Value>Request No:</Value>
-                          <Style>
-                            <FontFamily>Segoe UI</FontFamily>
-                            <FontSize>8pt</FontSize>
-                            <FontWeight>Bold</FontWeight>
-                            <Color>#555555</Color>
-                          </Style>
-                        </Textbox>
-                        <Textbox Name="ValRequestNo">
-                          <Top>0.2cm</Top>
-                          <Left>3.5cm</Left>
-                          <Width>5cm</Width>
-                          <Height>0.5cm</Height>
-                          <Value>=Fields!Request_No.Value</Value>
-                          <Style>
-                            <FontFamily>Segoe UI</FontFamily>
-                            <FontSize>8pt</FontSize>
-                            <Color>#1a1a2e</Color>
-                          </Style>
-                        </Textbox>
-                        <!-- Request Date -->
-                        <Textbox Name="LblRequestDate">
-                          <Top>0.2cm</Top>
-                          <Left>10cm</Left>
-                          <Width>2.5cm</Width>
-                          <Height>0.5cm</Height>
-                          <Value>Date:</Value>
-                          <Style>
-                            <FontFamily>Segoe UI</FontFamily>
-                            <FontSize>8pt</FontSize>
-                            <FontWeight>Bold</FontWeight>
-                            <Color>#555555</Color>
-                          </Style>
-                        </Textbox>
-                        <Textbox Name="ValRequestDate">
-                          <Top>0.2cm</Top>
-                          <Left>12cm</Left>
-                          <Width>6.5cm</Width>
-                          <Height>0.5cm</Height>
-                          <Value>=Format(Fields!Request_Date.Value, "dd-MMM-yyyy")</Value>
-                          <Style>
-                            <FontFamily>Segoe UI</FontFamily>
-                            <FontSize>8pt</FontSize>
-                            <Color>#1a1a2e</Color>
-                          </Style>
-                        </Textbox>
-                        <!-- Employee -->
-                        <Textbox Name="LblEmployee">
-                          <Top>0.9cm</Top>
-                          <Left>0.4cm</Left>
-                          <Width>3cm</Width>
-                          <Height>0.5cm</Height>
-                          <Value>Employee:</Value>
-                          <Style>
-                            <FontFamily>Segoe UI</FontFamily>
-                            <FontSize>8pt</FontSize>
-                            <FontWeight>Bold</FontWeight>
-                            <Color>#555555</Color>
-                          </Style>
-                        </Textbox>
-                        <Textbox Name="ValEmployee">
-                          <Top>0.9cm</Top>
-                          <Left>3.5cm</Left>
-                          <Width>9cm</Width>
-                          <Height>0.5cm</Height>
-                          <Value>=Fields!Employee_No.Value &amp; "  –  " &amp; Fields!Employee_Name.Value</Value>
-                          <Style>
-                            <FontFamily>Segoe UI</FontFamily>
-                            <FontSize>8pt</FontSize>
-                            <Color>#1a1a2e</Color>
-                          </Style>
-                        </Textbox>
-                        <!-- Department -->
-                        <Textbox Name="LblDepartment">
-                          <Top>1.6cm</Top>
-                          <Left>0.4cm</Left>
-                          <Width>3cm</Width>
-                          <Height>0.5cm</Height>
-                          <Value>Department:</Value>
-                          <Style>
-                            <FontFamily>Segoe UI</FontFamily>
-                            <FontSize>8pt</FontSize>
-                            <FontWeight>Bold</FontWeight>
-                            <Color>#555555</Color>
-                          </Style>
-                        </Textbox>
-                        <Textbox Name="ValDepartment">
-                          <Top>1.6cm</Top>
-                          <Left>3.5cm</Left>
-                          <Width>9cm</Width>
-                          <Height>0.5cm</Height>
-                          <Value>=Fields!Department.Value</Value>
-                          <Style>
-                            <FontFamily>Segoe UI</FontFamily>
-                            <FontSize>8pt</FontSize>
-                            <Color>#1a1a2e</Color>
-                          </Style>
-                        </Textbox>
-                        <!-- Is Urgent badge (top-right corner of header) -->
-                        <Textbox Name="UrgentBadge">
-                          <Top>0.2cm</Top>
-                          <Left>15cm</Left>
-                          <Width>3.6cm</Width>
-                          <Height>0.55cm</Height>
-                          <Value>
-                            =IIF(First(Fields!Is_Urgent.Value,"EmployeeAdvanceDataSet")=True,
-                              "⚑  URGENT REQUEST", "")
-                          </Value>
-                          <Style>
-                            <FontFamily>Segoe UI</FontFamily>
-                            <FontSize>8pt</FontSize>
-                            <FontWeight>Bold</FontWeight>
-                            <Color>#cc0000</Color>
-                            <TextAlign>Right</TextAlign>
-                            <VerticalAlign>Middle</VerticalAlign>
-                          </Style>
-                        </Textbox>
-                      </ReportItems>
-                    </Rectangle>
-                  </CellContents>
-                </TablixCell>
-              </TablixCells>
-            </TablixRow>
-            <!-- ══════════════════════════════════════════
-                 ROW 2  ─  Column Header Row (dark bar)
-                 ══════════════════════════════════════════ -->
-            <TablixRow>
-              <Height>0.7cm</Height>
-              <TablixCells>
-                <TablixCell>
-                  <CellContents>
-                    <Rectangle Name="ColHdrRect">
+                    </TextRun>
+                  </TextRuns>
+                  <Style>
+                    <TextAlign>Center</TextAlign>
+                  </Style>
+                </Paragraph>
+                <Paragraph>
+                  <TextRuns>
+                    <TextRun>
+                      <Value />
                       <Style>
-                        <BackgroundColor>#2c3e6b</BackgroundColor>
+                        <FontSize>18pt</FontSize>
+                        <FontWeight>Bold</FontWeight>
                       </Style>
-                      <ReportItems>
-                        <Textbox Name="ColHdrType">
-                          <Top>0.1cm</Top>
-                          <Left>0.2cm</Left>
-                          <Width>2.5cm</Width>
-                          <Height>0.5cm</Height>
-                          <Value>Type</Value>
-                          <Style>
-                            <FontFamily>Segoe UI</FontFamily>
-                            <FontSize>8pt</FontSize>
-                            <FontWeight>Bold</FontWeight>
-                            <Color>White</Color>
-                            <VerticalAlign>Middle</VerticalAlign>
-                          </Style>
-                        </Textbox>
-                        <Textbox Name="ColHdrDesc">
-                          <Top>0.1cm</Top>
-                          <Left>2.9cm</Left>
-                          <Width>6.8cm</Width>
-                          <Height>0.5cm</Height>
-                          <Value>Description</Value>
-                          <Style>
-                            <FontFamily>Segoe UI</FontFamily>
-                            <FontSize>8pt</FontSize>
-                            <FontWeight>Bold</FontWeight>
-                            <Color>White</Color>
-                            <VerticalAlign>Middle</VerticalAlign>
-                          </Style>
-                        </Textbox>
-                        <Textbox Name="ColHdrQty">
-                          <Top>0.1cm</Top>
-                          <Left>9.9cm</Left>
-                          <Width>2cm</Width>
-                          <Height>0.5cm</Height>
-                          <Value>Qty</Value>
-                          <Style>
-                            <FontFamily>Segoe UI</FontFamily>
-                            <FontSize>8pt</FontSize>
-                            <FontWeight>Bold</FontWeight>
-                            <Color>White</Color>
-                            <TextAlign>Right</TextAlign>
-                            <VerticalAlign>Middle</VerticalAlign>
-                          </Style>
-                        </Textbox>
-                        <Textbox Name="ColHdrUnitCost">
-                          <Top>0.1cm</Top>
-                          <Left>12.1cm</Left>
-                          <Width>2.8cm</Width>
-                          <Height>0.5cm</Height>
-                          <Value>Unit Cost</Value>
-                          <Style>
-                            <FontFamily>Segoe UI</FontFamily>
-                            <FontSize>8pt</FontSize>
-                            <FontWeight>Bold</FontWeight>
-                            <Color>White</Color>
-                            <TextAlign>Right</TextAlign>
-                            <VerticalAlign>Middle</VerticalAlign>
-                          </Style>
-                        </Textbox>
-                        <Textbox Name="ColHdrLineAmt">
-                          <Top>0.1cm</Top>
-                          <Left>15.1cm</Left>
-                          <Width>2.8cm</Width>
-                          <Height>0.5cm</Height>
-                          <Value>Amount</Value>
-                          <Style>
-                            <FontFamily>Segoe UI</FontFamily>
-                            <FontSize>8pt</FontSize>
-                            <FontWeight>Bold</FontWeight>
-                            <Color>White</Color>
-                            <TextAlign>Right</TextAlign>
-                            <VerticalAlign>Middle</VerticalAlign>
-                          </Style>
-                        </Textbox>
-                        <Textbox Name="ColHdrUrgent">
-                          <Top>0.1cm</Top>
-                          <Left>18.1cm</Left>
-                          <Width>0.7cm</Width>
-                          <Height>0.5cm</Height>
-                          <Value>!</Value>
-                          <Style>
-                            <FontFamily>Segoe UI</FontFamily>
-                            <FontSize>8pt</FontSize>
-                            <FontWeight>Bold</FontWeight>
-                            <Color>White</Color>
-                            <TextAlign>Center</TextAlign>
-                            <VerticalAlign>Middle</VerticalAlign>
-                          </Style>
-                        </Textbox>
-                      </ReportItems>
-                    </Rectangle>
-                  </CellContents>
-                </TablixCell>
-              </TablixCells>
-            </TablixRow>
-            <!-- ══════════════════════════════════════════
-                 ROW 3  ─  Detail rows (one per expense line)
-                 Alternating row colour for readability.
-                 ══════════════════════════════════════════ -->
-            <TablixRow>
-              <Height>0.7cm</Height>
-              <TablixCells>
-                <TablixCell>
-                  <CellContents>
-                    <Rectangle Name="DetailRowRect">
+                    </TextRun>
+                  </TextRuns>
+                  <Style />
+                </Paragraph>
+              </Paragraphs>
+              <Top>0.28in</Top>
+              <Height>0.25in</Height>
+              <Width>8.27in</Width>
+              <ZIndex>1</ZIndex>
+              <Style>
+                <Border />
+                <VerticalAlign>Middle</VerticalAlign>
+                <PaddingLeft>2pt</PaddingLeft>
+                <PaddingRight>2pt</PaddingRight>
+                <PaddingTop>2pt</PaddingTop>
+                <PaddingBottom>2pt</PaddingBottom>
+              </Style>
+            </Textbox>
+            <Textbox Name="Textbox4">
+              <rd:DefaultName>Textbox4</rd:DefaultName>
+              <CanGrow>true</CanGrow>
+              <KeepTogether>true</KeepTogether>
+              <Paragraphs>
+                <Paragraph>
+                  <TextRuns>
+                    <TextRun>
+                      <Value>Document Status: </Value>
                       <Style>
-                        <BackgroundColor>
-                          =IIF(RowNumber("DetailGroup") Mod 2 = 0, "#F5F5F5", "White")
-                        </BackgroundColor>
-                        <BorderStyle>
-                          <Bottom>Solid</Bottom>
-                        </BorderStyle>
-                        <BorderColor>
-                          <Bottom>#DDDDDD</Bottom>
-                        </BorderColor>
-                        <BorderWidth>
-                          <Bottom>0.25pt</Bottom>
-                        </BorderWidth>
+                        <FontSize>12pt</FontSize>
                       </Style>
-                      <ReportItems>
-                        <!-- Expense Type -->
-                        <Textbox Name="ValExpenseType">
-                          <Top>0.1cm</Top>
-                          <Left>0.2cm</Left>
-                          <Width>2.5cm</Width>
-                          <Height>0.5cm</Height>
-                          <CanGrow>true</CanGrow>
-                          <Value>=Fields!Expense_Type.Value</Value>
-                          <Style>
-                            <FontFamily>Segoe UI</FontFamily>
-                            <FontSize>8pt</FontSize>
-                            <Color>#1a1a2e</Color>
-                            <VerticalAlign>Middle</VerticalAlign>
-                          </Style>
-                        </Textbox>
-                        <!-- Description -->
-                        <Textbox Name="ValDescription">
-                          <Top>0.1cm</Top>
-                          <Left>2.9cm</Left>
-                          <Width>6.8cm</Width>
-                          <Height>0.5cm</Height>
-                          <CanGrow>true</CanGrow>
-                          <Value>=Fields!Description.Value</Value>
-                          <Style>
-                            <FontFamily>Segoe UI</FontFamily>
-                            <FontSize>8pt</FontSize>
-                            <Color>#1a1a2e</Color>
-                            <VerticalAlign>Middle</VerticalAlign>
-                          </Style>
-                        </Textbox>
-                        <!-- Quantity -->
-                        <Textbox Name="ValQuantity">
-                          <Top>0.1cm</Top>
-                          <Left>9.9cm</Left>
-                          <Width>2cm</Width>
-                          <Height>0.5cm</Height>
-                          <Value>=Format(Fields!Quantity.Value, "N2")</Value>
-                          <Style>
-                            <FontFamily>Segoe UI</FontFamily>
-                            <FontSize>8pt</FontSize>
-                            <Color>#1a1a2e</Color>
-                            <TextAlign>Right</TextAlign>
-                            <VerticalAlign>Middle</VerticalAlign>
-                          </Style>
-                        </Textbox>
-                        <!-- Unit Cost -->
-                        <Textbox Name="ValUnitCost">
-                          <Top>0.1cm</Top>
-                          <Left>12.1cm</Left>
-                          <Width>2.8cm</Width>
-                          <Height>0.5cm</Height>
-                          <Value>=Format(Fields!Unit_Cost.Value, "N2")</Value>
-                          <Style>
-                            <FontFamily>Segoe UI</FontFamily>
-                            <FontSize>8pt</FontSize>
-                            <Color>#1a1a2e</Color>
-                            <TextAlign>Right</TextAlign>
-                            <VerticalAlign>Middle</VerticalAlign>
-                          </Style>
-                        </Textbox>
-                        <!-- Line Amount -->
-                        <Textbox Name="ValLineAmount">
-                          <Top>0.1cm</Top>
-                          <Left>15.1cm</Left>
-                          <Width>2.8cm</Width>
-                          <Height>0.5cm</Height>
-                          <Value>=Format(Fields!Line_Amount.Value, "N2")</Value>
-                          <Style>
-                            <FontFamily>Segoe UI</FontFamily>
-                            <FontSize>8pt</FontSize>
-                            <Color>#1a1a2e</Color>
-                            <TextAlign>Right</TextAlign>
-                            <VerticalAlign>Middle</VerticalAlign>
-                          </Style>
-                        </Textbox>
-                        <!-- Urgent Flag -->
-                        <Textbox Name="ValUrgent">
-                          <Top>0.1cm</Top>
-                          <Left>18.1cm</Left>
-                          <Width>0.7cm</Width>
-                          <Height>0.5cm</Height>
-                          <Value>=IIF(Fields!Is_Urgent.Value = True, "⚑", "")</Value>
-                          <Style>
-                            <FontFamily>Segoe UI</FontFamily>
-                            <FontSize>9pt</FontSize>
-                            <FontWeight>Bold</FontWeight>
-                            <Color>#cc0000</Color>
-                            <TextAlign>Center</TextAlign>
-                            <VerticalAlign>Middle</VerticalAlign>
-                          </Style>
-                        </Textbox>
-                      </ReportItems>
-                    </Rectangle>
-                  </CellContents>
-                </TablixCell>
-              </TablixCells>
-            </TablixRow>
-            <!-- ══════════════════════════════════════════
-                 ROW 4  ─  Totals + Remarks + Signatures
-                 ══════════════════════════════════════════ -->
-            <TablixRow>
-              <Height>11cm</Height>
-              <TablixCells>
-                <TablixCell>
-                  <CellContents>
-                    <Rectangle Name="FooterRect">
-                      <ReportItems>
-                        <!-- ── Thin top border line ── -->
-                        <Rectangle Name="TotalsTopLine">
-                          <Top>0.1cm</Top>
-                          <Left>0cm</Left>
-                          <Width>19cm</Width>
-                          <Height>0.05cm</Height>
-                          <Style>
-                            <BackgroundColor>#2c3e6b</BackgroundColor>
-                          </Style>
-                        </Rectangle>
-                        <!-- ────────────────────────────
-                             TOTALS BLOCK  (right side)
-                             ──────────────────────────── -->
-                        <!-- Line Total sub-label -->
-                        <Textbox Name="LblLineTotal">
-                          <Top>0.4cm</Top>
-                          <Left>11cm</Left>
-                          <Width>4.5cm</Width>
-                          <Height>0.55cm</Height>
-                          <Value>Line Total (sum):</Value>
-                          <Style>
-                            <FontFamily>Segoe UI</FontFamily>
-                            <FontSize>8pt</FontSize>
-                            <Color>#555555</Color>
-                            <TextAlign>Right</TextAlign>
-                            <VerticalAlign>Middle</VerticalAlign>
-                          </Style>
-                        </Textbox>
-                        <Textbox Name="ValLineTotal">
-                          <Top>0.4cm</Top>
-                          <Left>15.7cm</Left>
-                          <Width>3.1cm</Width>
-                          <Height>0.55cm</Height>
-                          <Value>=Format(Sum(Fields!Line_Amount.Value), "N2")</Value>
-                          <Style>
-                            <FontFamily>Segoe UI</FontFamily>
-                            <FontSize>8pt</FontSize>
-                            <Color>#1a1a2e</Color>
-                            <TextAlign>Right</TextAlign>
-                            <VerticalAlign>Middle</VerticalAlign>
-                          </Style>
-                        </Textbox>
-                        <!-- Total Requested -->
-                        <Rectangle Name="TotalReqRect">
-                          <Top>1.1cm</Top>
-                          <Left>10.5cm</Left>
-                          <Width>8.3cm</Width>
-                          <Height>0.7cm</Height>
-                          <Style>
-                            <BackgroundColor>#EBF0FA</BackgroundColor>
-                            <BorderStyle>
-                              <Default>Solid</Default>
-                            </BorderStyle>
-                            <BorderColor>
-                              <Default>#BBCCEE</Default>
-                            </BorderColor>
-                            <BorderWidth>
-                              <Default>0.5pt</Default>
-                            </BorderWidth>
-                          </Style>
-                        </Rectangle>
-                        <Textbox Name="LblTotalRequested">
-                          <Top>1.2cm</Top>
-                          <Left>11cm</Left>
-                          <Width>4.2cm</Width>
-                          <Height>0.5cm</Height>
-                          <Value>Total Requested:</Value>
-                          <Style>
-                            <FontFamily>Segoe UI</FontFamily>
-                            <FontSize>9pt</FontSize>
-                            <FontWeight>Bold</FontWeight>
-                            <Color>#2c3e6b</Color>
-                            <VerticalAlign>Middle</VerticalAlign>
-                          </Style>
-                        </Textbox>
-                        <Textbox Name="ValTotalRequested">
-                          <Top>1.2cm</Top>
-                          <Left>15.4cm</Left>
-                          <Width>3.2cm</Width>
-                          <Height>0.5cm</Height>
-                          <Value>=Format(Fields!Total_Amount.Value, "N2")</Value>
-                          <Style>
-                            <FontFamily>Segoe UI</FontFamily>
-                            <FontSize>9pt</FontSize>
-                            <FontWeight>Bold</FontWeight>
-                            <Color>#2c3e6b</Color>
-                            <TextAlign>Right</TextAlign>
-                            <VerticalAlign>Middle</VerticalAlign>
-                          </Style>
-                        </Textbox>
-                        <!-- Approved Amount -->
-                        <Rectangle Name="ApprovedRect">
-                          <Top>2.0cm</Top>
-                          <Left>10.5cm</Left>
-                          <Width>8.3cm</Width>
-                          <Height>0.7cm</Height>
-                          <Style>
-                            <BackgroundColor>#DFF5E1</BackgroundColor>
-                            <BorderStyle>
-                              <Default>Solid</Default>
-                            </BorderStyle>
-                            <BorderColor>
-                              <Default>#A8D8AA</Default>
-                            </BorderColor>
-                            <BorderWidth>
-                              <Default>0.5pt</Default>
-                            </BorderWidth>
-                          </Style>
-                        </Rectangle>
-                        <Textbox Name="LblApprovedAmount">
-                          <Top>2.1cm</Top>
-                          <Left>11cm</Left>
-                          <Width>4.2cm</Width>
-                          <Height>0.5cm</Height>
-                          <Value>Approved Amount:</Value>
-                          <Style>
-                            <FontFamily>Segoe UI</FontFamily>
-                            <FontSize>9pt</FontSize>
-                            <FontWeight>Bold</FontWeight>
-                            <Color>#1a7a1a</Color>
-                            <VerticalAlign>Middle</VerticalAlign>
-                          </Style>
-                        </Textbox>
-                        <Textbox Name="ValApprovedAmount">
-                          <Top>2.1cm</Top>
-                          <Left>15.4cm</Left>
-                          <Width>3.2cm</Width>
-                          <Height>0.5cm</Height>
-                          <Value>=Format(Fields!Approved_Amount.Value, "N2")</Value>
-                          <Style>
-                            <FontFamily>Segoe UI</FontFamily>
-                            <FontSize>9pt</FontSize>
-                            <FontWeight>Bold</FontWeight>
-                            <Color>#1a7a1a</Color>
-                            <TextAlign>Right</TextAlign>
-                            <VerticalAlign>Middle</VerticalAlign>
-                          </Style>
-                        </Textbox>
-                        <!-- ────────────────────────────
-                             REMARKS  (left side)
-                             ──────────────────────────── -->
-                        <Textbox Name="LblRemarks">
-                          <Top>0.4cm</Top>
-                          <Left>0.2cm</Left>
-                          <Width>9.5cm</Width>
-                          <Height>0.5cm</Height>
-                          <Value>Manager Remarks:</Value>
-                          <Style>
-                            <FontFamily>Segoe UI</FontFamily>
-                            <FontSize>8pt</FontSize>
-                            <FontWeight>Bold</FontWeight>
-                            <Color>#555555</Color>
-                            <VerticalAlign>Middle</VerticalAlign>
-                          </Style>
-                        </Textbox>
-                        <Rectangle Name="RemarksBox">
-                          <Top>1.0cm</Top>
-                          <Left>0.2cm</Left>
-                          <Width>9.8cm</Width>
-                          <Height>2.8cm</Height>
-                          <Style>
-                            <BorderStyle>
-                              <Default>Solid</Default>
-                            </BorderStyle>
-                            <BorderColor>
-                              <Default>#CCCCCC</Default>
-                            </BorderColor>
-                            <BorderWidth>
-                              <Default>0.5pt</Default>
-                            </BorderWidth>
-                            <BackgroundColor>#FAFAFA</BackgroundColor>
-                          </Style>
-                        </Rectangle>
-                        <Textbox Name="ValRemarks">
-                          <Top>1.1cm</Top>
-                          <Left>0.4cm</Left>
-                          <Width>9.5cm</Width>
-                          <Height>2.6cm</Height>
-                          <CanGrow>true</CanGrow>
-                          <Value>=Fields!Remarks.Value</Value>
-                          <Style>
-                            <FontFamily>Segoe UI</FontFamily>
-                            <FontSize>8pt</FontSize>
-                            <Color>#333333</Color>
-                          </Style>
-                        </Textbox>
-                        <!-- ────────────────────────────
-                             SIGNATURES
-                             ──────────────────────────── -->
-                        <!-- Section header -->
-                        <Textbox Name="LblSignSection">
-                          <Top>4.5cm</Top>
-                          <Left>0.2cm</Left>
-                          <Width>18.6cm</Width>
-                          <Height>0.5cm</Height>
-                          <Value>Authorisation Signatures</Value>
-                          <Style>
-                            <FontFamily>Segoe UI</FontFamily>
-                            <FontSize>8pt</FontSize>
-                            <FontWeight>Bold</FontWeight>
-                            <Color>#555555</Color>
-                            <BorderStyle>
-                              <Bottom>Solid</Bottom>
-                            </BorderStyle>
-                            <BorderColor>
-                              <Bottom>#CCCCCC</Bottom>
-                            </BorderColor>
-                          </Style>
-                        </Textbox>
-                        <!-- Employee Signature -->
-                        <Textbox Name="LblEmpSign">
-                          <Top>5.3cm</Top>
-                          <Left>0.2cm</Left>
-                          <Width>3.5cm</Width>
-                          <Height>0.5cm</Height>
-                          <Value>Employee Signature:</Value>
-                          <Style>
-                            <FontFamily>Segoe UI</FontFamily>
-                            <FontSize>8pt</FontSize>
-                            <Color>#444444</Color>
-                          </Style>
-                        </Textbox>
-                        <Textbox Name="EmpSignLine">
-                          <Top>5.3cm</Top>
-                          <Left>3.9cm</Left>
-                          <Width>5.5cm</Width>
-                          <Height>0.5cm</Height>
-                          <Value>___________________________</Value>
-                          <Style>
-                            <FontFamily>Segoe UI</FontFamily>
-                            <FontSize>8pt</FontSize>
-                            <Color>#888888</Color>
-                          </Style>
-                        </Textbox>
-                        <Textbox Name="LblEmpDate">
-                          <Top>5.3cm</Top>
-                          <Left>10cm</Left>
-                          <Width>1.5cm</Width>
-                          <Height>0.5cm</Height>
-                          <Value>Date:</Value>
-                          <Style>
-                            <FontFamily>Segoe UI</FontFamily>
-                            <FontSize>8pt</FontSize>
-                            <Color>#444444</Color>
-                          </Style>
-                        </Textbox>
-                        <Textbox Name="EmpDateLine">
-                          <Top>5.3cm</Top>
-                          <Left>11.6cm</Left>
-                          <Width>3cm</Width>
-                          <Height>0.5cm</Height>
-                          <Value>____________</Value>
-                          <Style>
-                            <FontFamily>Segoe UI</FontFamily>
-                            <FontSize>8pt</FontSize>
-                            <Color>#888888</Color>
-                          </Style>
-                        </Textbox>
-                        <!-- Manager Signature -->
-                        <Textbox Name="LblMgrSign">
-                          <Top>6.6cm</Top>
-                          <Left>0.2cm</Left>
-                          <Width>3.5cm</Width>
-                          <Height>0.5cm</Height>
-                          <Value>Manager Signature:</Value>
-                          <Style>
-                            <FontFamily>Segoe UI</FontFamily>
-                            <FontSize>8pt</FontSize>
-                            <Color>#444444</Color>
-                          </Style>
-                        </Textbox>
-                        <Textbox Name="MgrSignLine">
-                          <Top>6.6cm</Top>
-                          <Left>3.9cm</Left>
-                          <Width>5.5cm</Width>
-                          <Height>0.5cm</Height>
-                          <Value>___________________________</Value>
-                          <Style>
-                            <FontFamily>Segoe UI</FontFamily>
-                            <FontSize>8pt</FontSize>
-                            <Color>#888888</Color>
-                          </Style>
-                        </Textbox>
-                        <Textbox Name="LblMgrDate">
-                          <Top>6.6cm</Top>
-                          <Left>10cm</Left>
-                          <Width>1.5cm</Width>
-                          <Height>0.5cm</Height>
-                          <Value>Date:</Value>
-                          <Style>
-                            <FontFamily>Segoe UI</FontFamily>
-                            <FontSize>8pt</FontSize>
-                            <Color>#444444</Color>
-                          </Style>
-                        </Textbox>
-                        <Textbox Name="MgrDateLine">
-                          <Top>6.6cm</Top>
-                          <Left>11.6cm</Left>
-                          <Width>3cm</Width>
-                          <Height>0.5cm</Height>
-                          <Value>____________</Value>
-                          <Style>
-                            <FontFamily>Segoe UI</FontFamily>
-                            <FontSize>8pt</FontSize>
-                            <Color>#888888</Color>
-                          </Style>
-                        </Textbox>
-                        <!-- Finance Signature -->
-                        <Textbox Name="LblFinSign">
-                          <Top>7.9cm</Top>
-                          <Left>0.2cm</Left>
-                          <Width>3.5cm</Width>
-                          <Height>0.5cm</Height>
-                          <Value>Finance Officer:</Value>
-                          <Style>
-                            <FontFamily>Segoe UI</FontFamily>
-                            <FontSize>8pt</FontSize>
-                            <Color>#444444</Color>
-                          </Style>
-                        </Textbox>
-                        <Textbox Name="FinSignLine">
-                          <Top>7.9cm</Top>
-                          <Left>3.9cm</Left>
-                          <Width>5.5cm</Width>
-                          <Height>0.5cm</Height>
-                          <Value>___________________________</Value>
-                          <Style>
-                            <FontFamily>Segoe UI</FontFamily>
-                            <FontSize>8pt</FontSize>
-                            <Color>#888888</Color>
-                          </Style>
-                        </Textbox>
-                        <Textbox Name="LblFinDate">
-                          <Top>7.9cm</Top>
-                          <Left>10cm</Left>
-                          <Width>1.5cm</Width>
-                          <Height>0.5cm</Height>
-                          <Value>Date:</Value>
-                          <Style>
-                            <FontFamily>Segoe UI</FontFamily>
-                            <FontSize>8pt</FontSize>
-                            <Color>#444444</Color>
-                          </Style>
-                        </Textbox>
-                        <Textbox Name="FinDateLine">
-                          <Top>7.9cm</Top>
-                          <Left>11.6cm</Left>
-                          <Width>3cm</Width>
-                          <Height>0.5cm</Height>
-                          <Value>____________</Value>
-                          <Style>
-                            <FontFamily>Segoe UI</FontFamily>
-                            <FontSize>8pt</FontSize>
-                            <Color>#888888</Color>
-                          </Style>
-                        </Textbox>
-                        <!-- Printed-on timestamp -->
-                        <Textbox Name="PrintedOn">
-                          <Top>9.8cm</Top>
-                          <Left>0.2cm</Left>
-                          <Width>18.6cm</Width>
-                          <Height>0.4cm</Height>
-                          <Value>="Printed on: " &amp; Format(Now(), "dd-MMM-yyyy HH:mm")</Value>
-                          <Style>
-                            <FontFamily>Segoe UI</FontFamily>
-                            <FontSize>7pt</FontSize>
-                            <Color>#AAAAAA</Color>
-                            <TextAlign>Right</TextAlign>
-                          </Style>
-                        </Textbox>
-                      </ReportItems>
-                    </Rectangle>
-                  </CellContents>
-                </TablixCell>
-              </TablixCells>
-            </TablixRow>
-          </TablixRows>
-        </TablixBody>
-      </Tablix>
-      <!-- END RequestGroup Tablix -->
-    </ReportItems>
-  </Body>
-  <!-- ═══════════════════════════════════════════════════
-       PAGE SETTINGS  –  A4 Portrait
-       ═══════════════════════════════════════════════════ -->
-  <Page>
-    <PageHeight>29.7cm</PageHeight>
-    <PageWidth>21cm</PageWidth>
-    <LeftMargin>1cm</LeftMargin>
-    <RightMargin>1cm</RightMargin>
-    <TopMargin>0.5cm</TopMargin>
-    <BottomMargin>1cm</BottomMargin>
-  </Page>
-  <Width>19cm</Width>
+                    </TextRun>
+                    <TextRun>
+                      <Value>=Fields!Status.Value</Value>
+                      <Style>
+                        <FontSize>12pt</FontSize>
+                      </Style>
+                    </TextRun>
+                  </TextRuns>
+                  <Style>
+                    <TextAlign>Center</TextAlign>
+                  </Style>
+                </Paragraph>
+                <Paragraph>
+                  <TextRuns>
+                    <TextRun>
+                      <Value />
+                      <Style />
+                    </TextRun>
+                  </TextRuns>
+                  <Style />
+                </Paragraph>
+              </Paragraphs>
+              <Top>0.53in</Top>
+              <Height>0.25in</Height>
+              <Width>8.27in</Width>
+              <ZIndex>2</ZIndex>
+              <Style>
+                <Border>
+                  <Style>None</Style>
+                </Border>
+                <VerticalAlign>Middle</VerticalAlign>
+                <PaddingLeft>2pt</PaddingLeft>
+                <PaddingRight>2pt</PaddingRight>
+                <PaddingTop>2pt</PaddingTop>
+                <PaddingBottom>2pt</PaddingBottom>
+              </Style>
+            </Textbox>
+            <Textbox Name="CompanyName">
+              <rd:DefaultName>CompanyName</rd:DefaultName>
+              <CanGrow>true</CanGrow>
+              <KeepTogether>true</KeepTogether>
+              <Paragraphs>
+                <Paragraph>
+                  <TextRuns>
+                    <TextRun>
+                      <Value>=First(Fields!CompanyName.Value, "DataSet_Result")</Value>
+                      <Style />
+                    </TextRun>
+                  </TextRuns>
+                  <Style />
+                </Paragraph>
+              </Paragraphs>
+              <Top>0.52278in</Top>
+              <Left>0.18889in</Left>
+              <Height>0.25in</Height>
+              <Width>1.35417in</Width>
+              <ZIndex>3</ZIndex>
+              <Style>
+                <Border>
+                  <Style>None</Style>
+                </Border>
+                <PaddingLeft>2pt</PaddingLeft>
+                <PaddingRight>2pt</PaddingRight>
+                <PaddingTop>2pt</PaddingTop>
+                <PaddingBottom>2pt</PaddingBottom>
+              </Style>
+            </Textbox>
+          </ReportItems>
+          <Style>
+            <Border>
+              <Style>None</Style>
+            </Border>
+          </Style>
+        </PageHeader>
+        <PageHeight>50.8cm</PageHeight>
+        <PageWidth>21.0058cm</PageWidth>
+        <LeftMargin>0.889cm</LeftMargin>
+        <RightMargin>0.889cm</RightMargin>
+        <TopMargin>0.8001cm</TopMargin>
+        <BottomMargin>0.8001cm</BottomMargin>
+        <ColumnSpacing>1.27cm</ColumnSpacing>
+        <Style>
+          <Border>
+            <Style>Solid</Style>
+          </Border>
+        </Style>
+      </Page>
+    </ReportSection>
+  </ReportSections>
+  <Code>Public Function BlankZero(ByVal Value As Decimal)
+    if Value = 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankPos(ByVal Value As Decimal)
+    if Value &gt; 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankZeroAndPos(ByVal Value As Decimal)
+    if Value &gt;= 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankNeg(ByVal Value As Decimal)
+    if Value &lt; 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankNegAndZero(ByVal Value As Decimal)
+    if Value &lt;= 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+</Code>
+  <Language>=User!Language</Language>
+  <ConsumeContainerWhitespace>true</ConsumeContainerWhitespace>
   <DataSets>
     <DataSet Name="DataSet_Result">
       <Fields>
