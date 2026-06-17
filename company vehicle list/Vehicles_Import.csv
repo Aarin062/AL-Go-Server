@@ -1,0 +1,15 @@
+V001,REG-1001,Delivery Van Alpha,Van,Ford,Transit,2023-05-15,35000.00,12500.50,Active,DRV01
+V002,REG-1002,Exec Car 1,Car,Toyota,Camry,2024-01-10,28000.00,4200.00,Active,DRV02
+V003,REG-1003,Heavy Hauler,Truck,Volvo,VNL,2022-11-20,120000.00,85000.00,In Maintenance,DRV03
+V004,REG-1004,City Scout,Motorcycle,Honda,CB500X,2025-02-05,6500.00,1500.00,Active,DRV04
+V005,REG-1005,Delivery Van Beta,Van,Mercedes,Sprinter,2021-08-30,42000.00,110000.00,Out of Service,DRV05
+V006,REG-1006,Exec Car 2,Car,Honda,Accord,2024-03-15,31000.00,2500.00,Active,DRV06
+V007,REG-1007,Service Truck 1,Truck,Ford,F-250,2023-07-22,55000.00,18000.00,Active,DRV07
+V008,REG-1008,Courier Bike 1,Motorcycle,Yamaha,MT-07,2025-04-10,7500.00,500.00,Active,DRV08
+V009,REG-1009,Regional Hauler,Truck,Peterbilt,389,2020-05-10,135000.00,210000.00,In Maintenance,DRV09
+V010,REG-1010,Utility Van,Van,Ram,ProMaster,2022-09-01,38000.00,45000.00,Active,DRV10
+V011,REG-1011,Sales Car 1,Car,Nissan,Altima,2023-11-05,26000.00,15000.00,Active,DRV11
+V012,REG-1012,Sales Car 2,Car,Nissan,Altima,2023-11-05,26000.00,14500.00,Active,DRV12
+V013,REG-1013,Courier Bike 2,Motorcycle,Kawasaki,Z650,2024-06-20,7200.00,8000.00,In Maintenance,DRV13
+V014,REG-1014,Site Manager Truck,Truck,Chevrolet,Silverado,2024-02-14,48000.00,12000.00,Active,DRV14
+V015,REG-1015,Spare Van,Van,Ford,Transit,2019-10-12,32000.00,145000.00,Out of Service,
